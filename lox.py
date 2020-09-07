@@ -36,6 +36,5 @@ def run_file(path: str):
         run(file.read())
 
 
-
 if __name__ ==  "__main__":
     main()

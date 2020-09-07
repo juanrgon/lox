@@ -40,17 +40,17 @@ class TokenType(str, Enum):
     CLASS = auto()
     ELSE = auto()
     FALSE = auto()
-    DEF = auto()
+    FUNC = auto()
     FOR = auto()
     IF = auto()
-    NIL = auto()
+    NONE = auto()
     OR = auto()
     PRINT = auto()
     RETURN = auto()
     SUPER = auto()
-    THIS = auto()
+    SELF = auto()
     TRUE = auto()
-    VAR = auto()
+    LET = auto()
     WHILE = auto()
 
     EOF = auto()
@@ -61,17 +61,17 @@ class TokenType(str, Enum):
             "and": cls.AND,
             "class": cls.CLASS,
             "else": cls.ELSE,
-            "false": cls.FALSE,
-            "def": cls.DEF,
+            "False": cls.FALSE,
+            "func": cls.FUNC,
             "for": cls.FOR,
             "if": cls.IF,
-            "nil": cls.NIL,
+            "None": cls.NONE,
             "or": cls.OR,
             "print": cls.PRINT,
             "return": cls.RETURN,
             "super": cls.SUPER,
-            "this": cls.THIS,
-            "true": cls.TRUE,
-            "var": cls.VAR,
+            "self": cls.SELF,
+            "True": cls.TRUE,
+            "let": cls.LET,
             "while": cls.WHILE,
         }.get(lexeme)
