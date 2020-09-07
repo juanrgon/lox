@@ -1,4 +1,6 @@
 import sys
+from scanner import Scanner
+from pprint import pprint
 
 
 # TODO: use click?
@@ -8,7 +10,7 @@ def main():
         print('Usage: plox [script]')
         sys.exit(64)
     elif len(args) == 2:
-        run_file(args[2])
+        run_file(args[1])
     else:
         repl()
 
@@ -21,15 +23,13 @@ def repl():
         except EOFError:
             sys.exit()
 
-
         if not line:
             break
 
         run(line)
 
 def run(code: str):
-    for token in code.split():
-        print(token)
+    pprint(Scanner.tokenize(code))
 
 def run_file(path: str):
     with open(path) as file:

@@ -1,15 +1,15 @@
 import attr
-from typing import Any, List
+from typing import Any, List, Optional, Union
 from collections import deque
 
-from token_type import TokenType
+from .token_type import TokenType
 
 
 @attr.s(auto_attribs=True, kw_only=True)
 class Token:
     token_type: TokenType
     lexeme: str
-    literal: Any
+    literal: Any = None
     line: int
 
 
@@ -52,12 +52,13 @@ class Scanner:
             "+": TokenType.PLUS,
             ";": TokenType.SEMICOLON,
             "*": TokenType.STAR,
+            "/": TokenType.SLASH,
         }
 
         line = 1
         while not scanner.at_end():
             token_type = None
-            literal = None
+            literal: Optional[Union[str, int, float]] = None
 
             if scanner.lexeme() == "\n":
                 line += 1
@@ -65,32 +66,70 @@ class Scanner:
             elif scanner.lexeme() in ('\r', '\t', ' '):
                 pass
 
+            elif scanner.lexeme() == '#':
+                while scanner.lookahead() != '\n':
+                    scanner.advance()
+
             elif scanner.lexeme() in single_char_tokens:
                 token_type = single_char_tokens[scanner.lexeme()]
 
-            elif scanner.lexeme().startswith("!"):
+            elif scanner.lexeme() == "!":
                 if scanner.match("="):
                     token_type = TokenType.BANG_EQUAL
                 else:
                     token_type = TokenType.BANG
 
-            elif scanner.lexeme().startswith("="):
+            elif scanner.lexeme() == "=":
                 if scanner.match("="):
                     token_type = TokenType.EQUAL_EQUAL
                 else:
                     token_type = TokenType.EQUAL
 
-            elif scanner.lexeme().startswith(">"):
+            elif scanner.lexeme() == ">":
                 if scanner.match("="):
                     token_type = TokenType.GREATER_EQUAL
                 else:
                     token_type = TokenType.GREATER
 
-            elif scanner.lexeme().startswith("<"):
+            elif scanner.lexeme() == "<":
                 if scanner.match("="):
                     token_type = TokenType.LESS_EQUAL
                 else:
                     token_type = TokenType.LESS
+
+            elif scanner.lexeme() in ('"', "'"):
+                quote = scanner.lexeme()
+                token_type = TokenType.STRING
+                while not scanner.match(quote):
+                    if scanner.at_end() or scanner.lookahead() == '\n':
+                        raise SyntaxError(f"Expected {quote}")
+
+                    scanner.advance()
+                    continue
+                literal = scanner.lexeme()[1:-1]
+
+            elif cls._is_digit(scanner.lexeme()):
+                token_type = TokenType.INTEGER
+                while cls._is_digit(scanner.lookahead()):
+                    scanner.advance()
+
+                literal = int(scanner.lexeme())
+
+                if scanner.match('.'):
+                    token_type = TokenType.FLOAT
+                    while cls._is_digit(scanner.lookahead()):
+                        scanner.advance()
+                    literal = float(scanner.lexeme())
+
+            elif cls._is_alpha(scanner.lexeme()):
+                token_type = TokenType.IDENTIFIER
+
+                while cls._is_alpha_numeric(scanner.lookahead()):
+                    scanner.advance()
+
+                keyword = TokenType.match_keyword(scanner.lexeme())
+                if keyword:
+                    token_type = keyword
 
             lexeme = scanner.consume()
 
@@ -98,6 +137,8 @@ class Scanner:
                 tokens.append(
                     Token(token_type=token_type, lexeme=lexeme, line=line, literal=literal)
                 )
+
+        tokens.append(Token(token_type=TokenType.EOF, lexeme="", line=line))
 
         return tokens
 
@@ -128,12 +169,18 @@ class Scanner:
     def at_end(self) -> bool:
         return self.end > len(self.source)
 
+    @classmethod
+    def _is_digit(cls, char: str) -> bool:
+        return '0' <= char <= '9'
 
-from pprint import pprint
-source = """
-( != )
- <= >=
- = ==
+    @classmethod
+    def _is_alpha(cls, char: str) -> bool:
+        return ('a' <= char <= 'z') or ('A' <= char <= 'Z') or char == '_'
 
-"""
-pprint(Scanner.tokenize(source))
+    @classmethod
+    def _is_alpha_numeric(cls, char: str) -> bool:
+        return cls._is_alpha(char) or cls._is_digit(char)
+
+
+class SyntaxError(Exception):
+    pass

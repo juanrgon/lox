@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import Optional
+from typing import List, Dict, Optional
 
 
 class TokenType(str, Enum):
@@ -32,14 +32,15 @@ class TokenType(str, Enum):
     # Literals.
     IDENTIFIER = auto()
     STRING = auto()
-    NUMBER = auto()
+    INTEGER = auto()
+    FLOAT = auto()
 
     # Keywords.
     AND = auto()
     CLASS = auto()
     ELSE = auto()
     FALSE = auto()
-    FUN = auto()
+    DEF = auto()
     FOR = auto()
     IF = auto()
     NIL = auto()
@@ -53,3 +54,24 @@ class TokenType(str, Enum):
     WHILE = auto()
 
     EOF = auto()
+
+    @classmethod
+    def match_keyword(cls, lexeme: str) -> Optional["TokenType"]:
+        return {
+            "and": cls.AND,
+            "class": cls.CLASS,
+            "else": cls.ELSE,
+            "false": cls.FALSE,
+            "def": cls.DEF,
+            "for": cls.FOR,
+            "if": cls.IF,
+            "nil": cls.NIL,
+            "or": cls.OR,
+            "print": cls.PRINT,
+            "return": cls.RETURN,
+            "super": cls.SUPER,
+            "this": cls.THIS,
+            "true": cls.TRUE,
+            "var": cls.VAR,
+            "while": cls.WHILE,
+        }.get(lexeme)

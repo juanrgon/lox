@@ -1,0 +1,17 @@
+( != )
+ <= >=
+ = ==
+
+# this is a comment
+(( )){} # grouping stuff
+!*+-/=<> <= == # operators
+
+"abcd"
+'abcd'
+
+13231
+
+a = 1
+if a == 1 {
+   
+}
