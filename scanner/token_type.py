@@ -3,7 +3,7 @@ from typing import List, Dict, Optional
 
 
 class TokenType(str, Enum):
-    def _generate_next_value_(name: str, start, count, last_values) -> str:
+    def _generate_next_value_(name: str, start, count, last_values) -> str:  # noqa
         return name
 
     # Single-character tokens.
