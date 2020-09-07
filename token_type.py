@@ -30,7 +30,7 @@ class TokenType(str, Enum):
     LESS_EQUAL = auto()
 
     # Literals.
-    DENTIFIER = auto()
+    IDENTIFIER = auto()
     STRING = auto()
     NUMBER = auto()
 
@@ -53,21 +53,3 @@ class TokenType(str, Enum):
     WHILE = auto()
 
     EOF = auto()
-
-    @classmethod
-    def match(cls, lexeme: str) -> Optional["TokenType"]:
-        match = None
-
-        if len(lexeme) == 1:
-            match = {
-                "(":cls.LEFT_PAREN,
-                ")":cls.RIGHT_PAREN,
-                "{":cls.LEFT_BRACE,
-                "}":cls.RIGHT_BRACE,
-                ",":cls.COMMA,
-                ".":cls.DOT,
-                "-":cls.MINUS,
-                "+":cls.PLUS,
-                ";":cls.SEMICOLON,
-                "*":cls.STAR,
-            }.get(lexeme)
