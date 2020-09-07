@@ -137,6 +137,10 @@ class Scanner:
                 tokens.append(
                     Token(token_type=token_type, lexeme=lexeme, line=line, literal=literal)
                 )
+            elif lexeme[0] in ("\n", "\t", "\r", "#", ' '):
+                pass
+            else:
+                raise SyntaxError(f"Syntax Error on line {line}: '{lexeme}'")
 
         tokens.append(Token(token_type=TokenType.EOF, lexeme="", line=line))
 
