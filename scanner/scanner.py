@@ -2,6 +2,7 @@ import attr
 from typing import List, Optional, Union
 from .exceptions import SyntaxException
 
+from .token import Token
 from .token_type import TokenType
 
 
