@@ -1,6 +1,8 @@
 import sys
-from scanner import Scanner
+from scanner import Scanner, SyntaxException
 from pprint import pprint
+from repl import repl
+from run_file import run_file
 
 
 # TODO: use click?
@@ -13,28 +15,6 @@ def main():
         run_file(args[1])
     else:
         repl()
-
-def repl():
-    while True:
-        print('> ', end='')
-
-        try:
-            line = input()
-        except EOFError:
-            sys.exit()
-
-        if not line:
-            break
-
-        run(line)
-
-def run(code: str):
-    pprint(Scanner.tokenize(code))
-
-def run_file(path: str):
-    with open(path) as file:
-        run(file.read())
-
 
 if __name__ ==  "__main__":
     main()

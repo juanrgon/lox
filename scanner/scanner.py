@@ -102,7 +102,7 @@ class Scanner:
                 token_type = TokenType.STRING
                 while not scanner.match(quote):
                     if scanner.at_end() or scanner.lookahead() == '\n':
-                        raise SyntaxError(f"Expected {quote}")
+                        raise SyntaxException(f"Expected {quote}")
 
                     scanner.advance()
                     continue
@@ -140,7 +140,7 @@ class Scanner:
             elif lexeme[0] in ("\n", "\t", "\r", "#", ' '):
                 pass
             else:
-                raise SyntaxError(f"Syntax Error on line {line}: '{lexeme}'")
+                raise SyntaxException(f"Syntax Error on line {line}: '{lexeme}'")
 
         tokens.append(Token(token_type=TokenType.EOF, lexeme="", line=line))
 
@@ -186,5 +186,5 @@ class Scanner:
         return cls._is_alpha(char) or cls._is_digit(char)
 
 
-class SyntaxError(Exception):
+class SyntaxException(Exception):
     pass

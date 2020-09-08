@@ -1,3 +1,3 @@
-from .scanner import Scanner
+from .scanner import Scanner, SyntaxException
 
-__all__ = ["Scanner"]
+__all__ = ["Scanner", "SyntaxException"]
