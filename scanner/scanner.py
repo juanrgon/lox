@@ -1,16 +1,8 @@
 import attr
-from typing import Any, List, Optional, Union
-from collections import deque
+from typing import List, Optional, Union
+from .exceptions import SyntaxException
 
 from .token_type import TokenType
-
-
-@attr.s(auto_attribs=True, kw_only=True)
-class Token:
-    token_type: TokenType
-    lexeme: str
-    literal: Any = None
-    line: int
 
 
 @attr.s(auto_attribs=True, kw_only=True)
@@ -63,11 +55,11 @@ class Scanner:
             if scanner.lexeme() == "\n":
                 line += 1
 
-            elif scanner.lexeme() in ('\r', '\t', ' '):
+            elif scanner.lexeme() in ("\r", "\t", " "):
                 pass
 
-            elif scanner.lexeme() == '#':
-                while scanner.lookahead() != '\n':
+            elif scanner.lexeme() == "#":
+                while scanner.lookahead() != "\n":
                     scanner.advance()
 
             elif scanner.lexeme() in single_char_tokens:
@@ -101,7 +93,7 @@ class Scanner:
                 quote = scanner.lexeme()
                 token_type = TokenType.STRING
                 while not scanner.match(quote):
-                    if scanner.at_end() or scanner.lookahead() == '\n':
+                    if scanner.at_end() or scanner.lookahead() == "\n":
                         raise SyntaxException(f"Expected {quote}")
 
                     scanner.advance()
@@ -115,7 +107,7 @@ class Scanner:
 
                 literal = int(scanner.lexeme())
 
-                if scanner.match('.'):
+                if scanner.match("."):
                     token_type = TokenType.FLOAT
                     while cls._is_digit(scanner.lookahead()):
                         scanner.advance()
@@ -135,9 +127,11 @@ class Scanner:
 
             if token_type:
                 tokens.append(
-                    Token(token_type=token_type, lexeme=lexeme, line=line, literal=literal)
+                    Token(
+                        token_type=token_type, lexeme=lexeme, line=line, literal=literal
+                    )
                 )
-            elif lexeme[0] in ("\n", "\t", "\r", "#", ' '):
+            elif lexeme[0] in ("\n", "\t", "\r", "#", " "):
                 pass
             else:
                 raise SyntaxException(f"Syntax Error on line {line}: '{lexeme}'")
@@ -175,16 +169,12 @@ class Scanner:
 
     @classmethod
     def _is_digit(cls, char: str) -> bool:
-        return '0' <= char <= '9'
+        return "0" <= char <= "9"
 
     @classmethod
     def _is_alpha(cls, char: str) -> bool:
-        return ('a' <= char <= 'z') or ('A' <= char <= 'Z') or char == '_'
+        return ("a" <= char <= "z") or ("A" <= char <= "Z") or char == "_"
 
     @classmethod
     def _is_alpha_numeric(cls, char: str) -> bool:
         return cls._is_alpha(char) or cls._is_digit(char)
-
-
-class SyntaxException(Exception):
-    pass

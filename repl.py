@@ -1,5 +1,4 @@
 import sys
-from enum import Enum
 from scanner import SyntaxException
 from run import run
 import sys
@@ -10,7 +9,7 @@ def repl():
 
     while True:
         try:
-            line = input(f'In [{len(history)}]: ')
+            line = input(f"In [{len(history)}]: ")
             history.append(line)
         except EOFError:
             sys.exit()
@@ -22,4 +21,3 @@ def repl():
             run(line)
         except SyntaxException as e:
             print(e)
-
