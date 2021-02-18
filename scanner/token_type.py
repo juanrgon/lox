@@ -1,8 +1,11 @@
 from enum import Enum, auto
-from typing import Optional
+from typing import Optional, List
 
 
 class TokenType(str, Enum):
+
+    def _generate_next_value_(name: str, start: int, count: int, last_values: List) -> str:  # noqa
+        return name
 
     # Single-character tokens.
     LEFT_PAREN = auto()
@@ -73,6 +76,3 @@ class TokenType(str, Enum):
             "let": cls.LET,
             "while": cls.WHILE,
         }.get(lexeme)
-
-    def _generate_next_value_(name: str, start, count, last_values) -> str:  # noqa
-        return name
