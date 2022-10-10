@@ -19,21 +19,21 @@ internal class Run {
         while (true)
         {
             Console.Write("> ");
-            var text = Console.ReadLine();
+            var code = Console.ReadLine();
 
-            if (text == null)
+            if (code == null)
             {
                 break;
             }
 
-            run(text);
+            run(code);
         }
     }
 
-    private static Error[] run(string source)
+    private static Error[] run(string code)
     {
         // For now, just print the tokens.
-        foreach (var token in Scanner.ScanTokens(source)) {
+        foreach (var token in Scanner.getTokens(code)) {
             Console.WriteLine(token);
         }
 
