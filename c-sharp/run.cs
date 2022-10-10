@@ -1,34 +1,13 @@
-﻿internal class Program
-{
-    private static void Main(string[] args)
-    {
-        if (args.Length == 0)
-        {
-            repl();
-        }
-        else if (args.Length == 1)
-        {
-            var errors = runFile(args[0]);
-            if (errors.Any())
-            {
-                Environment.Exit(65);
-            }
-        }
-        else
-        {
-            Console.WriteLine("Usage: lox [script]");
-        }
-    }
-
+internal class Run {
     // Run a lox program file
-    private static Error[] runFile(string filepath)
+    public static Error[] file(string filepath)
     {
         // Read all the text from the file and run the program
         return run(File.ReadAllText(filepath));
     }
 
     // Run a lox REPL
-    private static void repl()
+    public static void repl()
     {
         // read input from user in infinite loop
         while (true)
