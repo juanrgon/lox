@@ -14,6 +14,10 @@ internal class Token {
     public String asString() {
         return type + " " + lexeme + " " + literal;
     }
+
+    public Token[] listFromCode(string source) {
+        return new Token[0];
+    }
 }
 
 enum TokenType {
