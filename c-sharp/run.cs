@@ -1,3 +1,9 @@
+// Run lox code.
+
+// examples:
+// Run.file("c-sharp/lox.cs");
+// Run.repl();
+
 internal class Run {
     // Run a lox program file
     public static Error[] file(string filepath)
