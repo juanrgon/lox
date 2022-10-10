@@ -32,18 +32,6 @@ internal class Scanner {
                         tokens.Add(new Token(Token.Types.SLASH, scanner.lexeme(), null, line));
                     }
                     break;
-                case "(":
-                case ")":
-                case "{":
-                case "}":
-                case ",":
-                case ".":
-                case "-":
-                case "+":
-                case ";":
-                case "*":
-                    tokens.Add(Token.matchingSingleCharToken(scanner.lexeme(), line));
-                    break;
                 case "!":
                     tokens.Add(new Token(scanner.match("=") ? Token.Types.BANG_EQUAL: Token.Types.BANG, scanner.lexeme(), null, line));
                     break;
@@ -67,7 +55,11 @@ internal class Scanner {
                     }
                     break;
                 default:
-                    if (scanner.isDigit(scanner.lexeme())) {
+                    if (Token.singleCharTokens.ContainsKey(scanner.lexeme())) {
+                        tokens.Add(new Token(Token.singleCharTokens[scanner.lexeme()], scanner.lexeme(), null, line));
+                        break;
+                    }
+                    else if (scanner.isDigit(scanner.lexeme())) {
                         while (scanner.isDigit(scanner.lexeme())) scanner.advance();
 
                         // Look for a fractional part.
