@@ -52,23 +52,6 @@
             Console.WriteLine(token);
         }
 
-        return true;
+        return new Error[0];
     }
-}
-
-internal class Scanner {
-
-    public static Token[] ScanTokens(string source) {
-        return new Token[0];
-    }
-}
-
-
-internal class Token {
-}
-
-
-internal class Error {
-    int line;
-    string message;
 }
